@@ -231,9 +231,9 @@ module.exports = function(grunt) {
             dev: {
                 options: {
                     globals: {
-                        appId: '36125',
-                        authKey: 'gOGVNO4L9cBwkPE',
-                        authSecret: 'JdqsMHCjHVYkVxV',
+                        appId: '51089',
+                        authKey: 'X6C2zqGC6hxeu8R',
+                        authSecret: 'O6dkeX4RS9PpevK',
                         debugQM: '1',
                         debugQB: '1'
                     }

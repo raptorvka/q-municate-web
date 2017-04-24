@@ -68,6 +68,10 @@ define(function() {
         },
 
         QBconf: {
+            endpoints: {
+                chat: 'chatstage3.quickblox.com',
+                api: 'apistage3.quickblox.com'
+            },
             chatProtocol: {
                 // BOSH protocol = 1,
                 // WebSocket = 2
