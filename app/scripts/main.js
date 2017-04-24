@@ -116,7 +116,7 @@ requirejs([
     // Application initialization
     $(function() {
         // set Q-MUNICATE version
-        $('.j-appVersion').html('stage_3_quickblox');
+        $('.j-appVersion').html('qbstage3');
 
         $.ajaxSetup({cache: true});
 
