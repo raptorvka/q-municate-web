@@ -113,7 +113,7 @@ requirejs([
     // Application initialization
     $(function() {
         // set Q-MUNICATE version
-        $('.j-appVersion').html('v. 1.11.7');
+        $('.j-appVersion').html('QB_STAGE_3');
 
         $.ajaxSetup({cache: true});
 
@@ -121,7 +121,7 @@ requirejs([
         if (window.hasOwnProperty('FB')) {
             FB.init({
                 appId: QMCONFIG.fbAccount.appId,
-                version: 'v2.8'
+                version: 'v2.9'
             });
         }
 
