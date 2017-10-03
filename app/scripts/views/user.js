@@ -48,8 +48,14 @@ define([
             switchPage($('#forgotPage'));
         },
 
-        logInTwitterDigits: function() {
-            User.logInTwitterDigits();
+        logInFirebase: function(callback) {
+            if (typeof callback === 'function') {
+                User.reLogInFirebasePhone(function(authParams) {
+                    callback(authParams);
+                });
+            } else {
+                new this.app.FirebaseWidget(User.logInFirebasePhone);
+            }
         },
 
         logInFacebook: function() {
@@ -95,11 +101,12 @@ define([
 
 
         successFormCallback: function() {
-            var $profileAvatar = $('#profile').find('.avatar');
+            var $profileAvatar = $('#avatar-container');
 
             this.removeSpinner();
             $profileAvatar.addClass('profileUserAvatar').css('background-image', "url(" + User.contact.avatar_url + ")");
             $profileAvatar.attr('data-id', User.contact.id);
+            $profileAvatar.attr('data-name', User.contact.full_name);
             switchPage($('#mainPage'));
             this.app.views.Dialog.createDataSpinner();
         },

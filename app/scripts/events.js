@@ -462,6 +462,8 @@ define([
 
             /* welcome page
             ----------------------------------------------------- */
+            Events.intiAuthorizationInputs();
+
             $('.j-btn_login_fb').on('click', function() {
                 if ($(this).hasClass('j-reloadPage')) {
                     window.location.reload();
@@ -477,21 +479,20 @@ define([
                 return false;
             });
 
-            $('.j-twitterDigits').on('click', function() {
+            $('.j-firebasePhone').on('click', function() {
                 if ($(this).hasClass('j-reloadPage')) {
                     window.location.reload();
                 }
 
-                if (window.Digits) {
-                    UserView.logInTwitterDigits();
+                if (window.firebase) {
+                    UserView.logInFirebase();
                 } else {
-                    $('.j-twitterDigits').addClass('not_allowed j-reloadPage')
+                    $('.j-firebasePhone').addClass('not_allowed j-reloadPage')
                         .html('Login by phone number failed.<br>Click to reload the page.');
                 }
 
                 return false;
             });
-
 
             $('#signupQB').on('click', function() {
                 Helpers.log('signup with QB');
@@ -604,7 +605,7 @@ define([
 
             /* popups
             ----------------------------------------------------- */
-            $('.header-links-item').on('click', '#logout', function(event) {
+            $body.on('click', '#logout', function(event) {
                 event.preventDefault();
                 openPopup($('#popupLogout'));
             });
@@ -969,6 +970,28 @@ define([
                 $(this).hide();
             });
 
+            $workspace.on('click', '.j-videoPlayer', function(e) {
+                var video = e.target;
+
+                if (!video.dataset.source) return false;
+
+                video.src = video.dataset.source;
+                video.preload = 'metadata';
+                video.poster = 'images/video_loader.gif';
+
+                video.addEventListener('loadeddata', isReady);
+
+                function isReady() {
+                    delete this.dataset.source;
+                    this.removeEventListener('loadeddata', isReady);
+
+                    this.poster = '';
+                    this.controls = true;
+                    this.autoplay = true;
+                    this.load();
+                }
+            });
+
             // send typing statuses with keyup event
             $workspace.on('keypress', '.j-message', function(event) {
                 var $self = $(this),
@@ -1076,6 +1099,30 @@ define([
             // videocalls
             VideoChatView.init();
         }
+    };
+
+    Events.intiAuthorizationInputs = function(el) {
+        $input = el ? el : $('.form-input');
+
+        $input.on('focus', function() {
+            var $this = $(this);
+
+            if (!$this.val()) {
+                $this.next('label').addClass('active');
+            }
+
+            return false;
+        });
+
+        $input.on('blur', function() {
+            var $this = $(this);
+
+            if (!$this.val()) {
+                $this.next('label').removeClass('active');
+            }
+
+            return false;
+        });
     };
 
     /* Private
