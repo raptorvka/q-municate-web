@@ -115,7 +115,7 @@ requirejs([
     // Application initialization
     $(function() {
         // set Q-MUNICATE version
-        $('.j-appVersion').html('QB_STAGE_3');
+        $('.j-appVersion').html('kafka_cluster/1.13.0');
 
         $.ajaxSetup({cache: true});
 
