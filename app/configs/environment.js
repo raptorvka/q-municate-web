@@ -76,8 +76,8 @@ define(function() {
 
         QBconf: {
             endpoints: {
-                chat: 'chatstage3.quickblox.com',
-                api: 'apistage3.quickblox.com'
+                chat: 'chatkafkacluster.quickblox.com',
+                api: 'apikafkacluster.quickblox.com'
             },
             chatProtocol: {
                 // BOSH protocol = 1,

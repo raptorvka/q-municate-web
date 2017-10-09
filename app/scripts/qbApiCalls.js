@@ -51,6 +51,11 @@ define([
                 QB.init(QMCONFIG.qbAccount.appId, QMCONFIG.qbAccount.authKey, QMCONFIG.qbAccount.authSecret, QMCONFIG.QBconf);
             } else {
                 QB.init(token, QMCONFIG.qbAccount.appId, null, QMCONFIG.QBconf);
+
+                if(!QB.service.qbInst.session) {
+                    QB.service.qbInst.session = {};
+                }
+
                 QB.service.qbInst.session.application_id = QMCONFIG.qbAccount.appId;
                 QB.service.qbInst.config.creds = QMCONFIG.qbAccount;
 

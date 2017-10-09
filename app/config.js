@@ -4,9 +4,9 @@ define(function() {
     var QMCONFIG = {
 
         qbAccount: {
-            appId: '51089',
-            authKey: 'X6C2zqGC6hxeu8R',
-            authSecret: 'O6dkeX4RS9PpevK'
+            appId: '24',
+            authKey: 'Sr5CHSvmuNWNB-O',
+            authSecret: 'jFYn9zb4d9KnEpQ'
         },
 
         fbAccount: {
@@ -76,8 +76,8 @@ define(function() {
 
         QBconf: {
             endpoints: {
-                chat: 'chatstage3.quickblox.com',
-                api: 'apistage3.quickblox.com'
+                api: 'apikafkacluster.quickblox.com',
+                chat: 'chatkafkacluster.quickblox.com'
             },
             chatProtocol: {
                 // BOSH protocol = 1,
