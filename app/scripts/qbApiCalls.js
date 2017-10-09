@@ -23,6 +23,7 @@ define([
         UserView,
         DialogView,
         ContactListView,
+        ContactList,
         User,
         Listeners;
 
@@ -38,6 +39,7 @@ define([
         UserView = this.app.views.User;
         DialogView = this.app.views.Dialog;
         ContactListView = this.app.views.ContactList;
+        ContactList = this.app.models.ContactList;
         User = this.app.models.User;
         Listeners = this.app.listeners;
     }
@@ -73,8 +75,8 @@ define([
                             callback();
                         });
                     });
-                } else if (Session.authParams.provider === 'twitter_digits') {
-                    self.getTwitterDigits(function() {
+                } else if (Session.authParams.provider === 'firebase_phone') {
+                    self.getFirebasePhone(function() {
                         callback();
                     });
                 } else {
@@ -161,7 +163,9 @@ define([
                             authParams: Session.encrypt(params)
                         });
 
-                        callback(res);
+                        if (typeof callback === 'function') {
+                            callback(res);
+                        }
                     } else {
                         Helpers.log(err);
 
@@ -171,7 +175,7 @@ define([
             });
         },
 
-        getTwitterDigits: function(callback) {
+        getFirebasePhone: function(callback) {
             self.createSession({}, function(session) {
                 QB.login(Session.authParams, function(err, user) {
                     if (user && !err) {
@@ -182,9 +186,9 @@ define([
 
                         callback(session);
                     } else {
-                        Helpers.log(err);
-
-                        window.location.reload();
+                        UserView.logInFirebase(function(authParams) {
+                            self.loginUser(authParams);
+                        });
                     }
                 });
             });
@@ -223,11 +227,22 @@ define([
                         Helpers.log(err.detail);
 
                     } else {
-                        Helpers.log('QB SDK: Users is found', res);
+                        Helpers.log('QB SDK: Users are found', res);
 
                         Session.update({
                             date: new Date()
                         });
+
+                        if (params.filter && params.filter.value) {
+                            var requestIds = params.filter.value.split(',').map(Number),
+                                responseIds = [];
+
+                            res.items.forEach(function(item) {
+                                responseIds.push(item.user.id);
+                            });
+
+                            ContactList.cleanUp(requestIds, responseIds);
+                        }
 
                         callback(res);
                     }
@@ -248,7 +263,7 @@ define([
                             items: []
                         });
                     } else {
-                        Helpers.log('QB SDK: Users is found', res);
+                        Helpers.log('QB SDK: User is found', res);
 
                         Session.update({
                             date: new Date()
@@ -337,9 +352,7 @@ define([
                 }, function(err) {
                     if (err) {
                         Helpers.log(err);
-
                         UserView.logout();
-                        window.location.reload();
                         fail(err.detail);
                     } else {
                         Listeners.stateActive = true;
@@ -356,10 +369,6 @@ define([
                         });
 
                         setRecoverySessionInterval();
-
-                        if (User.contact.full_name === 'Unknown user') {
-                            self.app.views.Profile.render().openPopup();
-                        }
                     }
                 });
             });
@@ -384,9 +393,6 @@ define([
                 Entities.Collections.dialogs = undefined;
                 // init the new dialog's collection
                 Entities.Collections.dialogs = new Entities.Collections.Dialogs();
-
-                // TODO: need to delete after bug fix (https://quickblox.atlassian.net/browse/QBWEBSDK-508)
-                window.location.reload();
             });
         },
 
